@@ -1,6 +1,7 @@
 name: doc_comp_exam
 include:
   - infra.yaml
+
 services:
   web:
     build: .
@@ -11,3 +12,4 @@ services:
         - action: sync
           path: .
           target: /code
+
