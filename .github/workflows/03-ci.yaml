@@ -7,7 +7,7 @@ jobs:
   CI:
     runs-on: ${{matrix.os}}
     env:
-      GH_REPO_ACCESS_BY_OWN_APPS: ${{ secrets.GH_REPO_ACCESS_BY_OWN_APPS }}
+      GH_APP_ACCESS_TOKEN_HDT: ${{ secrets.GH_APP_ACCESS_TOKEN_HDT }}
 
     strategy:
       fail-fast: true
