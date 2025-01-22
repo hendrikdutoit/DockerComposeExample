@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  workflow_call:
+
+jobs:
+  CI:
+    runs-on: ${{matrix.os}}
+    env:
+      GH_APP_ACCESS_TOKEN_HDT: ${{ secrets.GH_APP_ACCESS_TOKEN_HDT }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        #        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: [ '3.12' ]
+        #        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        os: [ 'ubuntu-latest' ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Configure Poetry
+        run: |
+          poetry config keyring.enabled false
+          poetry config http-basic.github.com x-access-token ${{ secrets.GH_APP_ACCESS_TOKEN_HDT }}
+          poetry config --list
+
+      - name: Install dependencies
+        run: |
+          poetry install --with dev
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Start Docker Compose
+        run: docker-compose -f docker-compose-github.yaml up -d
+
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for services to start..."
+          sleep 10
+
+      - name: Run pytest with coverage
+        run: |
+          echo "PythonPath=$PYTHONPATH"
+          poetry run pytest --cov=./ --cov-report=xml tests/test_dockercomposeexample.py::test_app_response
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: hendrikdutoit/dockercomposeexample
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker-compose -f docker-compose-github.yaml down
+

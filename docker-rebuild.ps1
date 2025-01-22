@@ -77,14 +77,14 @@ function ShowEnvVarHelp {
 function ShowHelp {
     $separator = "-" * 80
     Write-Host $separator -ForegroundColor Cyan
-    
+
     # Introduction
 @"
-This script stops the contaonders and tell Docker Compose to build images before 
-starting the containers. It's useful when you've made changes to the Dockerfile 
-or need to ensure that the latest version of the image is used.  
-It also forces Docker Compose to recreate the containers even if their 
-configuration and image haven't changed. It's useful for ensuring a clean state 
+This script stops the contaonders and tell Docker Compose to build images before
+starting the containers. It's useful when you've made changes to the Dockerfile
+or need to ensure that the latest version of the image is used.
+It also forces Docker Compose to recreate the containers even if their
+configuration and image haven't changed. It's useful for ensuring a clean state
 if your application's environment needs to be reset.
 Docker is started in the detached state, unless the --watch option is used.
 
@@ -112,7 +112,7 @@ Docker is started in the detached state, unless the --watch option is used.
     vr.ps1 -h
 
     Parameters:
-    1. watch: Enbale the watch feature. Docker cannot be started in teh detached state.
+    1. watch: Enable the watch feature. Docker cannot be started in the detached state.
 "@ | Write-Host
 
     Write-Host $separator -ForegroundColor Cyan
