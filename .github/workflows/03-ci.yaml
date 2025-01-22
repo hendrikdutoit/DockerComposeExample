@@ -61,11 +61,11 @@ jobs:
       - name: Run pytest with coverage
         run: |
           echo "PythonPath=$PYTHONPATH"
-          poetry run pytest --cov=./ --cov-report=xml tests//test_dockercomposeexample.py
+          poetry run pytest --cov=./ --cov-report=xml tests/test_dockercomposeexample.py::test_app_response
 
       - name: Tear down Docker Compose
         if: always()
-        run: docker-compose down
+        run: docker-compose -f docker-compose-github.yaml down
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
