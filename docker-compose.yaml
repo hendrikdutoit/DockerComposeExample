@@ -12,4 +12,3 @@ services:
         - action: sync
           path: .
           target: /code
-
