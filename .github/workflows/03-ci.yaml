@@ -8,6 +8,7 @@ jobs:
     runs-on: ${{matrix.os}}
     env:
       GH_APP_ACCESS_TOKEN_HDT: ${{ secrets.GH_APP_ACCESS_TOKEN_HDT }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     strategy:
       fail-fast: true
