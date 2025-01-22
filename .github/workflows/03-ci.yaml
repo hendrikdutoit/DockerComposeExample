@@ -27,6 +27,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
@@ -37,9 +42,6 @@ jobs:
           poetry config keyring.enabled false
           poetry config http-basic.github.com x-access-token ${{ secrets.GH_APP_ACCESS_TOKEN_HDT }}
           poetry config --list
-
-      #      - name: Upgrade pip
-      #        run: python -m pip install --upgrade pip
 
       - name: Install dependencies
         run: |
