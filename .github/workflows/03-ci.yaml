@@ -36,7 +36,7 @@ jobs:
       - name: Configure Poetry
         run: |
           poetry config keyring.enabled false
-          poetry config http-basic.github.com x-access-token ${{ secrets.GH_REPO_ACCESS_BY_OWN_APPS }}
+          poetry config http-basic.github.com x-access-token ${{ secrets.GH_APP_ACCESS_TOKEN_HDT }}
           poetry config --list
 
       #      - name: Upgrade pip
