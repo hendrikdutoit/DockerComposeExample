@@ -8,7 +8,6 @@ jobs:
     runs-on: ${{matrix.os}}
     env:
       GH_REPO_ACCESS_BY_OWN_APPS: ${{ secrets.GH_REPO_ACCESS_BY_OWN_APPS }}
-      VENV_ENVIRONMENT: ${{vars.VENV_ENVIRONMENT}}
 
     strategy:
       fail-fast: true
@@ -46,10 +45,25 @@ jobs:
         run: |
           poetry install --with dev
 
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Start Docker Compose
+        run: docker-compose up -d
+
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for services to start..."
+          sleep 10
+
       - name: Run pytest with coverage
         run: |
           echo "PythonPath=$PYTHONPATH"
-          poetry run pytest --cov=./ --cov-report=xml
+          poetry run pytest --cov=./ --cov-report=xml tests\test_pytontemplateit.py
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker-compose down
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -58,3 +72,6 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: hendrikdutoit/dockercomposeexample
+
+
+
