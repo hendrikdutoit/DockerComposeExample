@@ -61,7 +61,7 @@ jobs:
       - name: Run pytest with coverage
         run: |
           echo "PythonPath=$PYTHONPATH"
-          poetry run pytest --cov=./ --cov-report=xml tests\test_pytontemplateit.py
+          poetry run pytest --cov=./ --cov-report=xml tests//test_dockercomposeexample.py
 
       - name: Tear down Docker Compose
         if: always()
