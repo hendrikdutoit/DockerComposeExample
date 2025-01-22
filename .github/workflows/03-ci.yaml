@@ -63,10 +63,6 @@ jobs:
           echo "PythonPath=$PYTHONPATH"
           poetry run pytest --cov=./ --cov-report=xml tests/test_dockercomposeexample.py::test_app_response
 
-      - name: Tear down Docker Compose
-        if: always()
-        run: docker-compose -f docker-compose-github.yaml down
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
@@ -74,3 +70,8 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: hendrikdutoit/dockercomposeexample
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker-compose -f docker-compose-github.yaml down
+
